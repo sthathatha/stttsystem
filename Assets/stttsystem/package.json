@@ -1,7 +1,7 @@
 {
   "name": "com.sttt.stttsystem",
   "displayName": "StttSystem",
-  "version": "2024.11.15.1",
+  "version": "2024.11.15",
   "unity": "2022.3",
   "description": "共通管理クラス",
   "author": {

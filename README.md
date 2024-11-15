@@ -2,6 +2,8 @@
 
 ## 準備
 Package Managerから Packages:Unity Registry ＞ Input System をインストールしておく  
+
+Package Managerで ＋ ＞ from git Uri ＞ https://github.com/sthathatha/stttsystem.git?path=/Assets/stttsystem
 ManagerSceneにプレハブStttSystemを配置する
 
 ## 各シーンの作成
