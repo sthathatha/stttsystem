@@ -19,13 +19,15 @@ ManagerSceneScript.GetInstance()からマネージャー操作
  LoadMainSceneで呼び出す→現在のMainSceneが閉じられて切り替わる  
 
 ### SubScriptBase
- LoadSubSceneで呼び出す→他のシーンに影響を与えない
- 	自身のDeleteSceneで消える
- 	またはManagerのDeleteSubSceneAllで全消し
+ LoadSubSceneで呼び出す→他のシーンに影響を与えない  
+  InitParamをオーバーライドしてパラメータ受取
+  自身のDeleteSceneで消える  
+  またはManagerのDeleteSubSceneAllで全消し  
 
 ### GameScriptBase
- StartGameSceneで呼び出す→現在のMainSceneが一時停止して切り替わり、終わると戻って来る
- 	自身のExitGameを呼び出すとMainSceneに戻る
+ 未実装
+ StartGameSceneで呼び出す→現在のMainSceneが一時停止して切り替わり、終わると戻って来る  
+  自身のExitGameを呼び出すとMainSceneに戻る
 
 GlobalData.GetSaveData()　セーブデータアクセス
 
