@@ -48,6 +48,7 @@ public class ManagerSceneScript : MonoBehaviour
     {
         _instance = this;
         subScriptList = new List<SubScriptBase>();
+        subSceneParamList = new List<SubSceneParam>();
     }
     #endregion
 
