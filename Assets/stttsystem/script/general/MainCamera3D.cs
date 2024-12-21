@@ -55,6 +55,8 @@ public class MainCamera3D : MonoBehaviour
 
     /// <summary>Œü‚«¶‰E</summary>
     private DeltaFloat rotLR;
+    /// <summary>¶‰E‰ñ“]</summary>
+    public float RotateLR { get { return rotLR.Get(); } }
     /// <summary>Œü‚«ã‰º</summary>
     private DeltaFloat rotUD;
     /// <summary>‹——£</summary>
