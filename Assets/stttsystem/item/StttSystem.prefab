@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seDummy: {fileID: 3445592881941377975}
-  mainBgmSource: {fileID: 0}
+  mainBgmSource: {fileID: 7010909805389922170}
   gameBgmSource: {fileID: 6937339284775599564}
   voiceSource: {fileID: 7489949775796395363}
   commonSeSelect: {fileID: 0}
@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 1898215446349702483}
   - component: {fileID: 5920567868866242283}
   - component: {fileID: 1164480071492636895}
+  - component: {fileID: 5279482489644641796}
   m_Layer: 0
   m_Name: mainCamera
   m_TagString: MainCamera
@@ -351,6 +352,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b056064e54a536849838e3f2b5879b89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5279482489644641796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2763553510494948601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1371aa012e2ca5f4886767e9ae01506c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3445592881941377975
@@ -531,6 +544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   init_scene: 
+  camera_is_2d: 1
 --- !u!1 &4527163154855914784
 GameObject:
   m_ObjectHideFlags: 0
@@ -578,7 +592,7 @@ MonoBehaviour:
   fader: {fileID: 2268522831873780011}
   system: {fileID: 5448049876748378092}
   soundManager: {fileID: 1688525826170011552}
-  mainCam: {fileID: 1164480071492636895}
+  mainCam: {fileID: 2763553510494948601}
 --- !u!1 &5240612527487041486
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,10 @@ using UnityEngine;
 /// <summary>
 /// カメラクラス
 /// </summary>
-public class MainCamera : MonoBehaviour
+public class MainCamera2D : MonoBehaviour
 {
+    #region 変数
+
     /// <summary>カメラ移動速度</summary>
     private const float CAM_SPEED = 1000f;
     /// <summary>即設定距離</summary>
@@ -20,6 +22,10 @@ public class MainCamera : MonoBehaviour
 
     /// <summary>シェイク管理</summary>
     private Shaker shaker;
+
+    #endregion
+
+    #region 基底
 
     /// <summary>
     /// 初期化
@@ -64,6 +70,10 @@ public class MainCamera : MonoBehaviour
         transform.position = new Vector3(basePos.x, basePos.y + shakeY, -10);
     }
 
+    #endregion
+
+    #region 位置管理
+
     /// <summary>
     /// 位置設定
     /// </summary>
@@ -101,6 +111,10 @@ public class MainCamera : MonoBehaviour
         transform.position = new Vector3(basePos.x, basePos.y + shakeY, -10);
     }
 
+    #endregion
+
+    #region シェイク管理
+
     /// <summary>
     /// シェイク1回
     /// </summary>
@@ -125,4 +139,6 @@ public class MainCamera : MonoBehaviour
     {
         shaker.Stop();
     }
+
+    #endregion
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
@@ -46,6 +47,7 @@ public class ManagerSceneScript : MonoBehaviour
     public ManagerSceneScript()
     {
         _instance = this;
+        subScriptList = new List<SubScriptBase>();
     }
     #endregion
 
@@ -69,11 +71,16 @@ public class ManagerSceneScript : MonoBehaviour
     public void SetGameScript(GameScriptBase script) { gameScript = script; }
     private GameScriptBase gameScript = null;
 
+    /// <summary>サブシーン</summary>
+    private List<SubScriptBase> subScriptList = null;
+    /// <summary>サブシーン読み込み待ちパラメータ</summary>
+    private List<SubSceneParam> subSceneParamList = null;
+
     /// <summary>サウンド管理</summary>
     public SoundManager soundManager = null;
 
     /// <summary>カメラ</summary>
-    public MainCamera mainCam = null;
+    public GameObject mainCam = null;
 
     #endregion
 
@@ -84,13 +91,24 @@ public class ManagerSceneScript : MonoBehaviour
 
     #endregion
 
-    #region 初期化
+    #region 基底
+
     /// <summary>
     /// 初期化
     /// </summary>
     /// <returns></returns>
     IEnumerator Start()
     {
+        // メモリ減った時リソース削除
+        Application.lowMemory += () =>
+        {
+            Resources.UnloadUnusedAssets();
+        };
+
+        // カメラ2Dか3D
+        mainCam.GetComponent<MainCamera2D>().enabled = system.camera_is_2d;
+        mainCam.GetComponent<MainCamera3D>().enabled = !system.camera_is_2d;
+
         GlobalData.GetSaveData().LoadSystemData();
         soundManager.UpdateBgmVolume();
         soundManager.UpdateSeVolume();
@@ -122,9 +140,22 @@ public class ManagerSceneScript : MonoBehaviour
         yield return mainScript.AfterFadeIn(true);
         SceneState = State.Main;
     }
+
     #endregion
 
     #region グローバルUI取得
+
+    /// <summary>
+    /// 2Dカメラ
+    /// </summary>
+    /// <returns></returns>
+    public MainCamera2D GetCamera2D() { return mainCam.GetComponent<MainCamera2D>(); }
+
+    /// <summary>
+    /// 3Dカメラ
+    /// </summary>
+    /// <returns></returns>
+    public MainCamera3D GetCamera3D() { return mainCam.GetComponent<MainCamera3D>(); }
 
     ///// <summary>ダイアログウィンドウ</summary>
     ///// <returns></returns>
@@ -293,6 +324,97 @@ public class ManagerSceneScript : MonoBehaviour
         // BGM開始
         var bgmData = mainScript.GetBgm();
         soundManager.PlayMainBgm(bgmData.Item1, bgmData.Item2);
+    }
+
+    #endregion
+
+    #region サブシーン管理
+
+    /// <summary>
+    /// サブシーンロード
+    /// </summary>
+    /// <param name="sceneName"></param>
+    /// <param name="prms">パラメータint群</param>
+    public void LoadSubScene(string sceneName, params int[] prms)
+    {
+        subSceneParamList.Add(new SubSceneParam(sceneName, prms));
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+    }
+
+    /// <summary>
+    /// サブシーンロード終了時に呼び出す
+    /// </summary>
+    /// <param name="scr"></param>
+    public void LoadedSubScene(SubScriptBase scr)
+    {
+        for (var i = 0; i < subSceneParamList.Count; i++)
+        {
+            // 同名シーンを複数呼ぶとタイミングによりパラメータが変わる可能性があるが
+            // 同名なら入れ替わっても問題ないだろう
+            if (scr.gameObject.scene.name != subSceneParamList[i].sceneName) continue;
+
+            // パラメータ渡して初期化
+            scr.InitParam(subSceneParamList[i].prmList);
+
+            subSceneParamList.RemoveAt(i);
+            break;
+        }
+
+        subScriptList.Add(scr);
+    }
+
+    /// <summary>
+    /// サブシーン読み込みパラメータクラス
+    /// </summary>
+    private class SubSceneParam
+    {
+        public string sceneName;
+        public List<int> prmList;
+
+        public SubSceneParam(string name, params int[] prms)
+        {
+            sceneName = name;
+            prmList = new List<int>();
+            prmList.AddRange(prms);
+        }
+    }
+
+    /// <summary>
+    /// サブシーン削除
+    /// </summary>
+    /// <param name="subscr"></param>
+    public void DeleteSubScene(SubScriptBase subscr)
+    {
+        subScriptList.Remove(subscr);
+        SceneManager.UnloadSceneAsync(subscr.gameObject.scene);
+    }
+
+    /// <summary>
+    /// サブシーン全削除
+    /// </summary>
+    public void DeleteSubSceneAll()
+    {
+        StartCoroutine(DeleteSubSceneAllCoroutine());
+    }
+
+    /// <summary>
+    /// サブシーン全削除コルーチン
+    /// </summary>
+    private IEnumerator DeleteSubSceneAllCoroutine()
+    {
+        foreach (var subscr in subScriptList)
+        {
+            //subscr
+        }
+
+        // ロード中のがあったら消す
+        yield return new WaitWhile(() => subSceneParamList.Any());
+
+        foreach (var subscr in subScriptList)
+        {
+            SceneManager.UnloadSceneAsync(subscr.gameObject.scene);
+        }
+        subScriptList.Clear();
     }
 
     #endregion

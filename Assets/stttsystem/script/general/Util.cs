@@ -4,6 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// 汎用機能
+/// </summary>
 public partial class Util
 {
     /// <summary>
@@ -122,7 +125,7 @@ public partial class Util
     /// </summary>
     /// <param name="pos"></param>
     /// <returns></returns>
-    public static Constant.Direction2D GetDirectionFromVec(Vector3 pos)
+    public static Constant.Direction2D Get2DDirectionFromVec(Vector3 pos)
     {
         if (Mathf.Abs(pos.x) > Mathf.Abs(pos.y))
         {
@@ -145,7 +148,7 @@ public partial class Util
     /// </summary>
     /// <param name="dir"></param>
     /// <returns></returns>
-    public static Vector3 GetVector3FromDirection(Constant.Direction2D dir)
+    public static Vector3 Get2DVector3FromDirection(Constant.Direction2D dir)
     {
         return dir switch
         {
@@ -161,7 +164,7 @@ public partial class Util
     /// </summary>
     /// <param name="radian"></param>
     /// <returns></returns>
-    public static Quaternion GetRotateQuaternion(float radian)
+    public static Quaternion Get2DRotateQuaternion(float radian)
     {
         return Quaternion.Euler(0, 0, Mathf.Rad2Deg * radian);
     }
@@ -171,7 +174,7 @@ public partial class Util
     /// </summary>
     /// <param name="radian"></param>
     /// <returns></returns>
-    public static Vector3 GetVector3IdentityFromRot(float radian)
+    public static Vector3 Get2DVector3IdentityFromRot(float radian)
     {
         return new Vector3(Mathf.Cos(radian), Mathf.Sin(radian));
     }
@@ -181,9 +184,39 @@ public partial class Util
     /// </summary>
     /// <param name="v"></param>
     /// <returns></returns>
-    public static float GetRadianFromVector(Vector3 v)
+    public static float Get2DRadianFromVector(Vector3 v)
     {
         v = v.normalized;
         return Mathf.Atan2(v.y, v.x);
+    }
+
+    /// <summary>
+    /// 0～2πの間に正規化
+    /// </summary>
+    /// <param name="rad"></param>
+    /// <returns></returns>
+    public static float GetNormalRadian(float rad)
+    {
+        if (rad >= 0f && rad < Mathf.PI * 2f)
+        {
+            return rad;
+        }
+
+        var cnt = Mathf.FloorToInt(rad / (Mathf.PI * 2f));
+        return rad - cnt * Mathf.PI * 2f;
+    }
+
+    /// <summary>
+    /// minとmaxに押し込めた値
+    /// </summary>
+    /// <param name="val"></param>
+    /// <param name="min"></param>
+    /// <param name="max"></param>
+    /// <returns></returns>
+    public static float GetClampF(float val, float min, float max)
+    {
+        if (val > max) return max;
+        if (val < min) return min;
+        return val;
     }
 }

@@ -8,4 +8,5 @@ using UnityEngine;
 public class stttsystem : MonoBehaviour
 {
     public string init_scene;
+    public bool camera_is_2d = true;
 }
