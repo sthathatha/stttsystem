@@ -380,6 +380,12 @@ public class ManagerSceneScript : MonoBehaviour
     }
 
     /// <summary>
+    /// サブシーンロード中
+    /// </summary>
+    /// <returns></returns>
+    public bool IsLoadingSubScene() { return subSceneParamList.Any(); }
+
+    /// <summary>
     /// サブシーン削除
     /// </summary>
     /// <param name="subscr"></param>
@@ -402,7 +408,7 @@ public class ManagerSceneScript : MonoBehaviour
     /// </summary>
     private IEnumerator DeleteSubSceneAllCoroutine()
     {
-        if (subScriptList.Any())
+        if (IsLoadingSubScene())
         {
             // ロード中のがあったら今あるのを一旦スリープして待つ
             foreach (var subscr in subScriptList)
