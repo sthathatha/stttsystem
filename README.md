@@ -8,15 +8,24 @@ ManagerSceneにプレハブStttSystemを配置する
 
 ## 各シーンの作成
 Scene  
-├system	←MainScriptBaseまたはGameScriptBaseから派生したスクリプトを持つ  
+├system	←MainScriptBase または GameScriptBase または SubScriptBase から派生したスクリプトを持つ  
 └parent	←オブジェクトの親　これのActiveが制御される  
 　├……いろいろ
 
 ## スクリプト使い方
 ManagerSceneScript.GetInstance()からマネージャー操作  
-MainScriptBaseのシーンはLoadMainSceneで呼び出す→現在のMainSceneが閉じられて切り替わる  
-GameScriptBaseのシーンはStartGameSceneで呼び出す→現在のMainSceneが一時停止して切り替わり、終わると戻って来る  
-	GameScript内からExitGameを呼び出す
+
+### MainScriptBase
+ LoadMainSceneで呼び出す→現在のMainSceneが閉じられて切り替わる  
+
+### SubScriptBase
+ LoadSubSceneで呼び出す→他のシーンに影響を与えない
+ 	自身のDeleteSceneで消える
+ 	またはManagerのDeleteSubSceneAllで全消し
+
+### GameScriptBase
+ StartGameSceneで呼び出す→現在のMainSceneが一時停止して切り替わり、終わると戻って来る
+ 	自身のExitGameを呼び出すとMainSceneに戻る
 
 GlobalData.GetSaveData()　セーブデータアクセス
 
