@@ -8,6 +8,13 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SubScriptBase : MonoBehaviour
 {
+    #region メンバー
+
+    /// <summary>スリープ時にActive=falseする親オブジェクト</summary>
+    public GameObject objectParent = null;
+
+    #endregion
+
     /// <summary>
     /// 開始時
     /// </summary>
@@ -43,5 +50,13 @@ public class SubScriptBase : MonoBehaviour
     protected void DeleteScene()
     {
         ManagerSceneScript.GetInstance().DeleteSubScene(this);
+    }
+
+    /// <summary>
+    /// ゲーム開始用にスリープ
+    /// </summary>
+    virtual public void Sleep()
+    {
+        objectParent?.SetActive(false);
     }
 }

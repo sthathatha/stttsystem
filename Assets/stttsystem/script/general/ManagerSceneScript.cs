@@ -402,14 +402,18 @@ public class ManagerSceneScript : MonoBehaviour
     /// </summary>
     private IEnumerator DeleteSubSceneAllCoroutine()
     {
-        foreach (var subscr in subScriptList)
+        if (subScriptList.Any())
         {
-            //subscr
+            // ロード中のがあったら今あるのを一旦スリープして待つ
+            foreach (var subscr in subScriptList)
+            {
+                subscr.Sleep();
+            }
+
+            yield return new WaitWhile(() => subSceneParamList.Any());
         }
 
-        // ロード中のがあったら消す
-        yield return new WaitWhile(() => subSceneParamList.Any());
-
+        // 全部消し
         foreach (var subscr in subScriptList)
         {
             SceneManager.UnloadSceneAsync(subscr.gameObject.scene);
