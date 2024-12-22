@@ -338,7 +338,7 @@ public class ManagerSceneScript : MonoBehaviour
 
     #region サブシーン管理
 
-    private static object _subSceneLock = default;
+    private static object _subSceneLock = new();
     /// <summary>
     /// ロック実行
     /// </summary>
