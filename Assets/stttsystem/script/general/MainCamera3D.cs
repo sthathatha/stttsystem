@@ -83,7 +83,7 @@ public class MainCamera3D : MonoBehaviour
         distance = new DeltaFloat();
         targetPos.Set(Vector3.zero);
         rotLR.Set(0f);
-        rotUD.Set(0f);
+        rotUD.Set((rot_up_limit + rot_down_limit) / 2f);
         distance.Set((dist_max + dist_min) / 2f);
 
         shaker = new Shaker();
