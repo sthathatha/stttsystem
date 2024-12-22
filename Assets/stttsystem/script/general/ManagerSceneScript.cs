@@ -338,6 +338,19 @@ public class ManagerSceneScript : MonoBehaviour
 
     #region サブシーン管理
 
+    private static object _subSceneLock = default;
+    /// <summary>
+    /// ロック実行
+    /// </summary>
+    /// <param name="act"></param>
+    private void SubSceneLockAct(Action act)
+    {
+        lock (_subSceneLock)
+        {
+            act.Invoke();
+        }
+    }
+
     /// <summary>
     /// サブシーンのリスト取得
     /// </summary>
@@ -351,7 +364,10 @@ public class ManagerSceneScript : MonoBehaviour
     /// <param name="prms">パラメータint群</param>
     public void LoadSubScene(string sceneName, params int[] prms)
     {
-        subSceneParamList.Add(new SubSceneParam(sceneName, prms));
+        SubSceneLockAct(() =>
+        {
+            subSceneParamList.Add(new SubSceneParam(sceneName, prms));
+        });
         SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
     }
 
@@ -361,20 +377,23 @@ public class ManagerSceneScript : MonoBehaviour
     /// <param name="scr"></param>
     public void LoadedSubScene(SubScriptBase scr)
     {
-        for (var i = 0; i < subSceneParamList.Count; i++)
+        SubSceneLockAct(() =>
         {
-            // 同名シーンを複数呼ぶとタイミングによりパラメータが変わる可能性があるが
-            // 同名なら入れ替わっても問題ないだろう
-            if (scr.gameObject.scene.name != subSceneParamList[i].sceneName) continue;
+            for (var i = 0; i < subSceneParamList.Count; i++)
+            {
+                // 同名シーンを複数呼ぶとタイミングによりパラメータが変わる可能性があるが
+                // 同名なら入れ替わっても問題ないだろう
+                if (scr.gameObject.scene.name != subSceneParamList[i].sceneName) continue;
 
-            // パラメータ渡して初期化
-            scr.InitParam(subSceneParamList[i].prmList);
+                // パラメータ渡して初期化
+                scr.InitParam(subSceneParamList[i].prmList);
 
-            subSceneParamList.RemoveAt(i);
-            break;
-        }
+                subSceneParamList.RemoveAt(i);
+                break;
+            }
 
-        subScriptList.Add(scr);
+            subScriptList.Add(scr);
+        });
     }
 
     /// <summary>
@@ -405,7 +424,10 @@ public class ManagerSceneScript : MonoBehaviour
     /// <param name="subscr"></param>
     public void DeleteSubScene(SubScriptBase subscr)
     {
-        subScriptList.Remove(subscr);
+        SubSceneLockAct(() =>
+        {
+            subScriptList.Remove(subscr);
+        });
         SceneManager.UnloadSceneAsync(subscr.gameObject.scene);
     }
 
@@ -434,11 +456,14 @@ public class ManagerSceneScript : MonoBehaviour
         }
 
         // 全部消し
-        foreach (var subscr in subScriptList)
+        SubSceneLockAct(() =>
         {
-            SceneManager.UnloadSceneAsync(subscr.gameObject.scene);
-        }
-        subScriptList.Clear();
+            foreach (var subscr in subScriptList)
+            {
+                SceneManager.UnloadSceneAsync(subscr.gameObject.scene);
+            }
+            subScriptList.Clear();
+        });
     }
 
     #endregion
