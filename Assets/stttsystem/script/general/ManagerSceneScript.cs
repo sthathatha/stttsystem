@@ -344,6 +344,12 @@ public class ManagerSceneScript : MonoBehaviour
     #region サブシーン管理
 
     /// <summary>
+    /// サブシーンのリスト取得
+    /// </summary>
+    /// <returns></returns>
+    public List<SubScriptBase> GetSubSceneList() { return subScriptList; }
+
+    /// <summary>
     /// サブシーンロード
     /// </summary>
     /// <param name="sceneName"></param>
