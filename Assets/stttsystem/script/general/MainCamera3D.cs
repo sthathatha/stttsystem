@@ -195,7 +195,7 @@ public class MainCamera3D : MonoBehaviour
     {
         if (rotLR.IsActive()) return;
 
-        rotLR.Set(rotLR.Get() + rate * MaxDelta);
+        rotLR.Set(rotLR.Get() + rate * MaxDelta * ROT_SPEED);
         UpdateCamera();
     }
 
