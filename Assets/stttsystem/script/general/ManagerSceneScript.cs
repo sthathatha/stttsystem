@@ -107,8 +107,20 @@ public class ManagerSceneScript : MonoBehaviour
         };
 
         // ÉJÉÅÉâ2DÇ©3D
-        mainCam.GetComponent<MainCamera2D>().enabled = system.camera_is_2d;
-        mainCam.GetComponent<MainCamera3D>().enabled = !system.camera_is_2d;
+        var cam = mainCam.GetComponent<Camera>();
+        if (system.camera_is_2d)
+        {
+            mainCam.GetComponent<MainCamera2D>().enabled = true;
+            mainCam.GetComponent<MainCamera3D>().enabled = false;
+            cam.orthographic = true;
+        }
+        else
+        {
+            mainCam.GetComponent<MainCamera2D>().enabled = false;
+            mainCam.GetComponent<MainCamera3D>().enabled = true;
+            cam.orthographic = false;
+            cam.fieldOfView = 45f;
+        }
 
         GlobalData.GetSaveData().LoadSystemData();
         soundManager.UpdateBgmVolume();
