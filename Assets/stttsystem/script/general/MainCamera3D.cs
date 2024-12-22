@@ -122,8 +122,8 @@ public class MainCamera3D : MonoBehaviour
             rotLR.Set(Util.GetNormalRadian(rotLR.Get()));
 
         // ‰ñ“]‚ðŒvŽZ
-        var quatUD = Quaternion.Euler(rotUD.Get(), 0, 0);
-        var quatLR = Quaternion.Euler(0, rotLR.Get(), 0);
+        var quatUD = Quaternion.Euler(rotUD.Get() * Mathf.Rad2Deg, 0, 0);
+        var quatLR = Quaternion.Euler(0, rotLR.Get() * Mathf.Rad2Deg, 0);
         var quat = quatLR * quatUD;
         transform.rotation = quat;
 
