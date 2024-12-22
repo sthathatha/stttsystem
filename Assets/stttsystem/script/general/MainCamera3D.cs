@@ -15,7 +15,7 @@ public class MainCamera3D : MonoBehaviour
     private const float DELTATIME_LIMIT = 0.06f;
 
     /// <summary>カメラ回転速度</summary>
-    private const float ROT_SPEED = 70f;
+    private const float ROT_SPEED = 70f * Mathf.Deg2Rad;
 
     /// <summary>カメラ距離速度</summary>
     private const float DIST_SPEED = 20f;
