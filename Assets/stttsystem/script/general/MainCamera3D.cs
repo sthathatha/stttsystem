@@ -130,7 +130,7 @@ public class MainCamera3D : MonoBehaviour
         // 位置を計算
         // 距離分のベクトル
         var distVec = quat * new Vector3(0, 0, -distance.Get());
-        transform.position = targetPos.Get() - distVec;
+        transform.position = targetPos.Get() + distVec;
     }
 
     /// <summary>
