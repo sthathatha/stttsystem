@@ -41,15 +41,6 @@ public class ManagerSceneScript : MonoBehaviour
     /// <returns></returns>
     public static ManagerSceneScript GetInstance() { return _instance; }
 
-    /// <summary>
-    /// コンストラクタ
-    /// </summary>
-    public ManagerSceneScript()
-    {
-        _instance = this;
-        subScriptList = new List<SubScriptBase>();
-        subSceneParamList = new List<SubSceneParam>();
-    }
     #endregion
 
     #region メンバー
@@ -100,6 +91,10 @@ public class ManagerSceneScript : MonoBehaviour
     /// <returns></returns>
     IEnumerator Start()
     {
+        _instance = this;
+        subScriptList = new List<SubScriptBase>();
+        subSceneParamList = new List<SubSceneParam>();
+
         // メモリ減った時リソース削除
         Application.lowMemory += () =>
         {
