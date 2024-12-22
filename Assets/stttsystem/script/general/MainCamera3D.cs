@@ -36,6 +36,9 @@ public class MainCamera3D : MonoBehaviour
 
     #region メンバー
 
+    /// <summary>フラグ取得用システムオブジェクト</summary>
+    public stttsystem system = null;
+
     /// <summary>カメラ距離最大</summary>
     public float dist_max { get; set; } = 10f;
     /// <summary>カメラ距離最小</summary>
@@ -194,6 +197,7 @@ public class MainCamera3D : MonoBehaviour
     public void SetRotateLR(float rate)
     {
         if (rotLR.IsActive()) return;
+        if (system.camera_3d_leftright_reverse) rate = -rate;
 
         rotLR.Set(rotLR.Get() + rate * MaxDelta * ROT_SPEED);
         UpdateCamera();
@@ -206,8 +210,9 @@ public class MainCamera3D : MonoBehaviour
     public void SetRotateUD(float rate)
     {
         if (rotUD.IsActive()) return;
+        if (system.camera_3d_updown_reverse) rate = -rate;
 
-        var newUD = rotUD.Get() + rate * MaxDelta * ROT_SPEED;
+        var newUD = rotUD.Get() - rate * MaxDelta * ROT_SPEED;
 
         rotUD.Set(Util.GetClampF(newUD, rot_down_limit, rot_up_limit));
         UpdateCamera();

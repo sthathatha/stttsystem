@@ -366,6 +366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1371aa012e2ca5f4886767e9ae01506c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  system: {fileID: 5448049876748378092}
 --- !u!1 &3445592881941377975
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,6 +546,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   init_scene: 
   camera_is_2d: 1
+  camera_3d_updown_reverse: 0
+  camera_3d_leftright_reverse: 0
 --- !u!1 &4527163154855914784
 GameObject:
   m_ObjectHideFlags: 0
