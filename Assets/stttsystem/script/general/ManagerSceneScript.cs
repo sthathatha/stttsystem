@@ -357,6 +357,10 @@ public class ManagerSceneScript : MonoBehaviour
     /// <returns></returns>
     public List<SubScriptBase> GetSubSceneList() { return subScriptList; }
 
+    /// <summary>ロード中サブシーンのパラメータリスト取得</summary>
+    /// <returns></returns>
+    public List<SubSceneParam> GetSubSceneLoadingList() { return subSceneParamList; }
+
     /// <summary>
     /// サブシーンロード
     /// </summary>
@@ -399,7 +403,7 @@ public class ManagerSceneScript : MonoBehaviour
     /// <summary>
     /// サブシーン読み込みパラメータクラス
     /// </summary>
-    private class SubSceneParam
+    public class SubSceneParam
     {
         public string sceneName;
         public List<int> prmList;
