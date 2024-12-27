@@ -19,8 +19,10 @@ public class SubScriptBase : MonoBehaviour
     /// 開始時
     /// </summary>
     /// <returns></returns>
-    private void Start()
+    private IEnumerator Start()
     {
+        yield return InitStart();
+
         // マネージャーに設定して初期化パラメータを呼んでもらう
         ManagerSceneScript.GetInstance().LoadedSubScene(this);
     }
@@ -32,6 +34,15 @@ public class SubScriptBase : MonoBehaviour
     public void InitParam(List<int> paramList)
     {
         StartCoroutine(InitCoroutine(paramList));
+    }
+
+    /// <summary>
+    /// 生成した一番最初（Start時）の初期処理
+    /// </summary>
+    /// <returns></returns>
+    virtual protected IEnumerator InitStart()
+    {
+        yield break;
     }
 
     /// <summary>
