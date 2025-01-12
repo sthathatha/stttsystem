@@ -1,11 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 /// <summary>
@@ -74,12 +72,18 @@ public class ManagerSceneScript : MonoBehaviour
     /// <summary>カメラ</summary>
     public GameObject mainCam = null;
 
+    /// <summary>時間速度</summary>
+    private float time_speed = 1f;
+
     #endregion
 
     #region 変数
 
     /// <summary>プレイヤー初期化位置</summary>
     protected int initId = 0;
+
+    /// <summary>有効なdeltaTime</summary>
+    public float validDeltaTime = 0f;
 
     #endregion
 
@@ -147,6 +151,27 @@ public class ManagerSceneScript : MonoBehaviour
         yield return FadeIn();
         yield return mainScript.AfterFadeIn(true);
         SceneState = State.Main;
+    }
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    private void Update()
+    {
+        // 時間更新
+        if (time_speed <= 0f)
+        {
+            validDeltaTime = 0f;
+        }
+        else
+        {
+            var dt = Time.deltaTime;
+            // 処理落ちで遅すぎた後
+            if (dt > 0.3f) dt = 0.03f;
+            // スピード考慮
+            validDeltaTime = dt * time_speed;
+        }
+
     }
 
     #endregion
@@ -468,6 +493,19 @@ public class ManagerSceneScript : MonoBehaviour
             }
             subScriptList.Clear();
         });
+    }
+
+    #endregion
+
+    #region 時間管理
+
+    /// <summary>
+    /// 時間の速度を設定
+    /// </summary>
+    /// <param name="speed"></param>
+    public void SetTimeSpeed(float speed)
+    {
+        time_speed = speed;
     }
 
     #endregion
