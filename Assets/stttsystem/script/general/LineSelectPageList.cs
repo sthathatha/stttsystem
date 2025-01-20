@@ -215,6 +215,24 @@ public class LineSelectPageList<T> : LineSelectList<T>
     }
 
     /// <summary>
+    /// ページング時、次ページの矢印表示ありか
+    /// </summary>
+    /// <returns></returns>
+    public bool NeedNextPageIcon()
+    {
+        return display_paging ? (GetNowPage() < GetMaxPage()) : false;
+    }
+
+    /// <summary>
+    /// ページング時、前ページの矢印表示ありか
+    /// </summary>
+    /// <returns></returns>
+    public bool NeedBeforePageIcon()
+    {
+        return display_paging ? (GetNowPage() > 1) : false;
+    }
+
+    /// <summary>
     /// スクロールバーSize用
     /// </summary>
     /// <returns></returns>
@@ -240,6 +258,30 @@ public class LineSelectPageList<T> : LineSelectList<T>
         if (maxHead <= 0) return 0f;
 
         return (float)headIndex / maxHead;
+    }
+
+    /// <summary>
+    /// ページングじゃない時、次スクロールの表示ありか
+    /// </summary>
+    /// <returns></returns>
+    public bool NeedNextScroll()
+    {
+        if (display_paging) return false;
+
+        var maxHead = list.Count - page_max + 1;
+        if (maxHead <= 0) return false;
+
+        return headIndex < maxHead;
+    }
+
+    /// <summary>
+    /// ページングじゃない時、前スクロールの表示ありか
+    /// </summary>
+    /// <returns></returns>
+    public bool NeedBeforeScroll()
+    {
+        if (display_paging) return false;
+        return headIndex > 0;
     }
 
     #endregion
