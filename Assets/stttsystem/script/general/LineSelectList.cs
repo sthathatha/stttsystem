@@ -80,7 +80,20 @@ public class LineSelectList<T>
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
-    public T GetItem(int index) { return list[index]; }
+    public T GetItem(int index)
+    {
+        if (index < 0 || index >= list.Count) return default;
+        return list[index];
+    }
+
+    /// <summary>
+    /// 選択中アイテム取得
+    /// </summary>
+    /// <returns></returns>
+    public T GetSelectItem()
+    {
+        return GetItem(selectIndex);
+    }
 
     #endregion
 }
