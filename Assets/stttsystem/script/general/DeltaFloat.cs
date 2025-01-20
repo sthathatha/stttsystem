@@ -23,12 +23,11 @@ public class DeltaFloat
     private MoveType moveType;
     private float startTime;
     private float endTime;
+    private float nowTime;
 
     private float beforeValue;
     private float afterValue;
     private bool active;
-
-    private float offset;
 
     /// <summary>
     /// コンストラクタ
@@ -36,17 +35,11 @@ public class DeltaFloat
     public DeltaFloat()
     {
         startTime = 0;
+        nowTime = 0;
         endTime = 0;
-        offset = 0;
 
         active = false;
     }
-
-    /// <summary>
-    /// オフセット追加
-    /// </summary>
-    /// <param name="ofs"></param>
-    public void AddOffset(float ofs) { offset += ofs; }
 
     /// <summary>
     /// 移動中
@@ -65,8 +58,7 @@ public class DeltaFloat
             return afterValue;
         }
 
-        var nowTime = Time.realtimeSinceStartup - startTime + offset;
-        if (nowTime > endTime)
+        if (nowTime >= endTime)
         {
             active = false;
             return afterValue;
@@ -93,6 +85,7 @@ public class DeltaFloat
     {
         beforeValue = val;
         afterValue = val;
+        nowTime = 0;
         endTime = 0;
         active = false;
     }
@@ -110,6 +103,7 @@ public class DeltaFloat
         startTime = Time.realtimeSinceStartup;
 
         afterValue = _val;
+        nowTime = 0;
         endTime = _time;
 
         active = true;
@@ -117,7 +111,7 @@ public class DeltaFloat
     }
 
     /// <summary>
-    /// 更新
+    /// 渡した値で更新（操作できるがfloatの誤差が出る）
     /// </summary>
     /// <param name="deltaTime"></param>
     public void Update(float deltaTime)
@@ -127,8 +121,26 @@ public class DeltaFloat
             return;
         }
 
-        var nowTime = Time.realtimeSinceStartup - startTime + offset;
-        if (nowTime > endTime)
+        nowTime += deltaTime;
+        if (nowTime >= endTime)
+        {
+            active = false;
+            return;
+        }
+    }
+
+    /// <summary>
+    /// リアルタイムでの更新（正確だが止まらない）
+    /// </summary>
+    public void Update()
+    {
+        if (!IsActive())
+        {
+            return;
+        }
+
+        nowTime = Time.realtimeSinceStartup - startTime;
+        if (nowTime >= endTime)
         {
             active = false;
             return;

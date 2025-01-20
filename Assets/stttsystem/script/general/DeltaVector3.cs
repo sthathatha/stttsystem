@@ -39,12 +39,6 @@ public class DeltaVector3
     }
 
     /// <summary>
-    /// オフセット追加
-    /// </summary>
-    /// <param name="ofs"></param>
-    public void AddOffset(float ofs) { _delta.AddOffset(ofs); }
-
-    /// <summary>
     /// 指定時間で値を変える
     /// </summary>
     /// <param name="_val"></param>
@@ -60,10 +54,19 @@ public class DeltaVector3
     }
 
     /// <summary>
-    /// 更新
+    /// 渡した値で更新（操作できるがfloatの誤差が出る）
     /// </summary>
     /// <param name="deltaTime"></param>
     public void Update(float deltaTime)
     {
+        _delta.Update(deltaTime);
+    }
+
+    /// <summary>
+    /// リアルタイムでの更新（正確だが止まらない）
+    /// </summary>
+    public void Update()
+    {
+        _delta.Update();
     }
 }
