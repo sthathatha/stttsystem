@@ -65,6 +65,16 @@ public class LineSelectList<T>
         }
     }
 
+    /// <summary>
+    /// æ“ª‚ğ‘I‘ğ
+    /// </summary>
+    virtual public void MoveReset()
+    {
+        if (list.Count == 0) return;
+
+        selectIndex = 0;
+    }
+
     #endregion
 
     #region æ“¾

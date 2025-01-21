@@ -106,6 +106,17 @@ public class LineSelectPageList<T> : LineSelectList<T>
     }
 
     /// <summary>
+    /// 先頭を選択
+    /// </summary>
+    public override void MoveReset()
+    {
+        base.MoveReset();
+        if (list.Count == 0) return;
+
+        headIndex = 0;
+    }
+
+    /// <summary>
     /// 次ページに動く
     /// </summary>
     public void MoveNextPage()
