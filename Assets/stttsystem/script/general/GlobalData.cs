@@ -50,11 +50,12 @@ public class GlobalData
     /// </summary>
     /// <param name="data"></param>
     /// <param name="key"></param>
+    /// <param name="def">デフォルト</param>
     /// <returns></returns>
-    private static string GetDictionaryString(Dictionary<string, string> data, string key)
+    private static string GetDictionaryString(Dictionary<string, string> data, string key, string def)
     {
         if (data.ContainsKey(key)) return data[key];
-        return "";
+        return def;
     }
 
     /// <summary>
@@ -62,12 +63,43 @@ public class GlobalData
     /// </summary>
     /// <param name="data"></param>
     /// <param name="key"></param>
-    /// <param name="def"></param>
+    /// <param name="def">デフォルト</param>
     /// <returns></returns>
     private static int GetDictionaryInt(Dictionary<string, string> data, string key, int def = 0)
     {
-        if (int.TryParse(GetDictionaryString(data, key), out int val)) return val;
+        if (int.TryParse(GetDictionaryString(data, key, ""), out int val)) return val;
         return def;
+    }
+
+    /// <summary>
+    /// セーブ用文字列に変換
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    private static string ToSaveString(Dictionary<string, string> data)
+    {
+        var strList = data.Select((pair, idx) => pair.Key + SEP_GAMEDATA_TITLE + pair.Value);
+
+        return string.Join(SEP_GAMEDATA_ITEM, strList);
+    }
+
+    /// <summary>
+    /// 文字列をdictionaryに変換
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    private static Dictionary<string, string> DictionaryFromString(string data)
+    {
+        var ret = new Dictionary<string, string>();
+        if (string.IsNullOrEmpty(data)) return ret;
+
+        foreach (var str in data.Split(SEP_GAMEDATA_ITEM))
+        {
+            var pair = str.Split(SEP_GAMEDATA_TITLE);
+            ret[pair[0]] = pair[1];
+        }
+
+        return ret;
     }
 
     #endregion
@@ -185,17 +217,18 @@ public class GlobalData
         /// ゲームデータ文字列取得
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="def">デフォルト</param>
         /// <returns></returns>
-        public string GetGameDataString(string key)
+        public string GetGameDataString(string key, string def = "")
         {
-            return GetDictionaryString(gameData, key);
+            return GetDictionaryString(gameData, key, def);
         }
 
         /// <summary>
         /// ゲームデータを整数で取得
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="def"></param>
+        /// <param name="def">デフォルト</param>
         /// <returns></returns>
         public int GetGameDataInt(string key, int def = 0)
         {
@@ -233,59 +266,45 @@ public class GlobalData
         }
 
         /// <summary>
+        /// システム汎用データセット
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetSystemGeneralData(string key, string value)
+        {
+            system.general[key] = value;
+        }
+
+        /// <summary>
+        /// システム汎用データセット整数版
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetSystemGeneralData(string key, int value)
+        {
+            SetSystemGeneralData(key, value.ToString());
+        }
+
+        /// <summary>
         /// システムデータ文字列取得
         /// </summary>
         /// <param name="key"></param>
+        /// <parma name="def">デフォルト</parma>
         /// <returns></returns>
-        public string GetSystemDataString(string key)
+        public string GetSystemDataString(string key, string def = "")
         {
-            return GetDictionaryString(system.general, key);
+            return GetDictionaryString(system.general, key, def);
         }
 
         /// <summary>
         /// システムデータを整数で取得
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="def"></param>
+        /// <param name="def">デフォルト</param>
         /// <returns></returns>
         public int GetSystemDataInt(string key, int def = 0)
         {
             return GetDictionaryInt(system.general, key, def);
-        }
-
-        #endregion
-
-        #region Dictionary操作
-
-        /// <summary>
-        /// セーブ用文字列に変換
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private string ToSaveString(Dictionary<string, string> data)
-        {
-            var strList = data.Select((pair, idx) => pair.Key + SEP_GAMEDATA_TITLE + pair.Value);
-
-            return string.Join(SEP_GAMEDATA_ITEM, strList);
-        }
-
-        /// <summary>
-        /// 文字列をdictionaryに変換
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private Dictionary<string, string> DictionaryFromString(string data)
-        {
-            var ret = new Dictionary<string, string>();
-            if (string.IsNullOrEmpty(data)) return ret;
-
-            foreach (var str in data.Split(SEP_GAMEDATA_ITEM))
-            {
-                var pair = str.Split(SEP_GAMEDATA_TITLE);
-                ret[pair[0]] = pair[1];
-            }
-
-            return ret;
         }
 
         #endregion
@@ -316,22 +335,43 @@ public class GlobalData
         #region Dictionary操作
 
         /// <summary>
-        /// システムデータ文字列取得
+        /// 汎用セット
         /// </summary>
         /// <param name="key"></param>
-        /// <returns></returns>
-        public string GetSystemDataString(string key)
+        /// <param name="value"></param>
+        public void SetGeneralData(string key, string value)
         {
-            return GetDictionaryString(general, key);
+            general[key] = value;
         }
 
         /// <summary>
-        /// システムデータを整数で取得
+        /// 汎用セット整数版
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetGeneralData(string key, int value)
+        {
+            SetGeneralData(key, value.ToString());
+        }
+
+        /// <summary>
+        /// 汎用データ文字列取得
         /// </summary>
         /// <param name="key"></param>
         /// <param name="def"></param>
         /// <returns></returns>
-        public int GetSystemDataInt(string key, int def = 0)
+        public string GetGeneralDataString(string key, string def = "")
+        {
+            return GetDictionaryString(general, key, def);
+        }
+
+        /// <summary>
+        /// 汎用データを整数で取得
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="def"></param>
+        /// <returns></returns>
+        public int GetGeneralDataInt(string key, int def = 0)
         {
             return GetDictionaryInt(general, key, def);
         }
