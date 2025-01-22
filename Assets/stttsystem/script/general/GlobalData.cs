@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GlobalData
 {
@@ -44,6 +41,35 @@ public class GlobalData
         }
         return _temporaryData;
     }
+    #endregion
+
+    #region Dictionary操作
+
+    /// <summary>
+    /// 文字列で取得
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    private static string GetDictionaryString(Dictionary<string, string> data, string key)
+    {
+        if (data.ContainsKey(key)) return data[key];
+        return "";
+    }
+
+    /// <summary>
+    /// intで取得
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="key"></param>
+    /// <param name="def"></param>
+    /// <returns></returns>
+    private static int GetDictionaryInt(Dictionary<string, string> data, string key, int def = 0)
+    {
+        if (int.TryParse(GetDictionaryString(data, key), out int val)) return val;
+        return def;
+    }
+
     #endregion
 
     /// <summary>
@@ -262,31 +288,6 @@ public class GlobalData
             return ret;
         }
 
-        /// <summary>
-        /// 文字列で取得
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        private string GetDictionaryString(Dictionary<string, string> data, string key)
-        {
-            if (data.ContainsKey(key)) return data[key];
-            return "";
-        }
-
-        /// <summary>
-        /// intで取得
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="key"></param>
-        /// <param name="def"></param>
-        /// <returns></returns>
-        private int GetDictionaryInt(Dictionary<string, string> data, string key, int def = 0)
-        {
-            if (int.TryParse(GetDictionaryString(data, key), out int val)) return val;
-            return def;
-        }
-
         #endregion
     }
 
@@ -295,6 +296,9 @@ public class GlobalData
     /// </summary>
     public class TemporaryData
     {
+        /// <summary>汎用</summary>
+        public Dictionary<string, string> general;
+
         public int dummy;
 
         public bool isLoadGame;
@@ -306,6 +310,32 @@ public class GlobalData
         {
             dummy = 0;
             isLoadGame = false;
+            general = new Dictionary<string, string>();
         }
+
+        #region Dictionary操作
+
+        /// <summary>
+        /// システムデータ文字列取得
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string GetSystemDataString(string key)
+        {
+            return GetDictionaryString(general, key);
+        }
+
+        /// <summary>
+        /// システムデータを整数で取得
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="def"></param>
+        /// <returns></returns>
+        public int GetSystemDataInt(string key, int def = 0)
+        {
+            return GetDictionaryInt(general, key, def);
+        }
+
+        #endregion
     }
 }
