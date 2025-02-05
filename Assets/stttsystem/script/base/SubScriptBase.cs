@@ -12,7 +12,12 @@ public class SubScriptBase : MonoBehaviour
     /// <summary>スリープ時にActive=falseする親オブジェクト</summary>
     public GameObject objectParent = null;
 
+    /// <summary>初期化終わり</summary>
+    private bool scriptInitEnd = false;
+
     #endregion
+
+    #region 内部処理
 
     /// <summary>
     /// 開始時
@@ -32,8 +37,44 @@ public class SubScriptBase : MonoBehaviour
     /// <param name="paramList"></param>
     public void InitParam(List<int> paramList)
     {
-        StartCoroutine(InitCoroutine(paramList));
+        StartCoroutine(InitCoroutineBase(paramList));
     }
+
+    /// <summary>
+    /// 初期化コルーチン
+    /// </summary>
+    /// <param name="paramList"></param>
+    /// <returns></returns>
+    private IEnumerator InitCoroutineBase(List<int> paramList)
+    {
+        yield return InitCoroutine(paramList);
+        scriptInitEnd = true;
+    }
+
+    /// <summary>
+    /// 更新
+    /// </summary>
+    private void Update()
+    {
+        // 初期化が終わってから呼ぶ
+        if (scriptInitEnd) { UpdateSub(); }
+    }
+
+    #endregion
+
+    #region 外部や派生先から呼び出す処理
+
+    /// <summary>
+    /// シーン削除
+    /// </summary>
+    protected void DeleteScene()
+    {
+        ManagerSceneScript.GetInstance().DeleteSubScene(this);
+    }
+
+    #endregion
+
+    #region 派生用
 
     /// <summary>
     /// 生成した一番最初（Start時）の初期処理
@@ -55,12 +96,9 @@ public class SubScriptBase : MonoBehaviour
     }
 
     /// <summary>
-    /// シーン削除
+    /// 派生更新用
     /// </summary>
-    protected void DeleteScene()
-    {
-        ManagerSceneScript.GetInstance().DeleteSubScene(this);
-    }
+    virtual protected void UpdateSub() { }
 
     /// <summary>
     /// ゲーム開始用にスリープ
@@ -69,4 +107,6 @@ public class SubScriptBase : MonoBehaviour
     {
         objectParent?.SetActive(false);
     }
+
+    #endregion
 }
