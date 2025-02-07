@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -102,6 +103,40 @@ public partial class Util
             var rand = RandomInt(0, list.Count - 1);
             ret.Add(list[rand]);
             list.RemoveAt(rand);
+        }
+
+        return ret;
+    }
+
+    /// <summary>
+    /// 確率リストから個数分のインデックスを選択する
+    /// </summary>
+    /// <param name="rateList"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
+    public static List<int> RandomIndexList(List<int> rateList, int count)
+    {
+        var ret = new List<int>();
+        if (count <= 0) return ret;
+        if (count >= rateList.Count)
+        {
+            return RandomUniqueIntList(0, rateList.Count - 1, rateList.Count);
+        }
+
+        var tmpList = rateList.ToList();
+        for (var i = 0; i < count; ++i)
+        {
+            var rand = RandomInt(0, tmpList.Sum() - 1);
+            for (var idx = 0; idx < tmpList.Count; ++idx)
+            {
+                rand -= tmpList[idx];
+                if (rand < 0)
+                {
+                    ret.Add(idx);
+                    tmpList.RemoveAt(idx);
+                    break;
+                }
+            }
         }
 
         return ret;
