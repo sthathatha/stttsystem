@@ -286,9 +286,10 @@ public class ManagerSceneScript : MonoBehaviour
     /// </summary>
     /// <param name="sceneName"></param>
     /// <param name="id">プレイヤー位置</param>
-    public void LoadMainScene(string sceneName, int id)
+    /// <param name="subSceneClear">サブシーン全部消す</param>
+    public void LoadMainScene(string sceneName, int id, bool subSceneClear = true)
     {
-        StartCoroutine(LoadMainSceneCoroutine(sceneName, id));
+        StartCoroutine(LoadMainSceneCoroutine(sceneName, id, subSceneClear));
     }
 
     /// <summary>
@@ -302,13 +303,21 @@ public class ManagerSceneScript : MonoBehaviour
     /// </summary>
     /// <param name="sceneName"></param>
     /// <param name="id"></param>
+    /// <param name="subSceneClear">サブシーン全部消す</param>
     /// <returns></returns>
-    private IEnumerator LoadMainSceneCoroutine(string sceneName, int id)
+    private IEnumerator LoadMainSceneCoroutine(string sceneName, int id, bool subSceneClear = true)
     {
         // フェードアウト
         SceneState = State.Loading;
         yield return FadeOut();
         initId = id;
+
+        // サブシーン消す
+        if (subSceneClear)
+        {
+            DeleteSubSceneAll();
+            yield return new WaitWhile(() => IsLoadingSubScene());
+        }
 
         // 旧シーンを保持してロード開始
         var oldScript = mainScript;
