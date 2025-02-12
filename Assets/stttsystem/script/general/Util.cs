@@ -123,17 +123,20 @@ public partial class Util
             return RandomUniqueIntList(0, rateList.Count - 1, rateList.Count);
         }
 
-        var tmpList = rateList.ToList();
+        var rateMax = rateList.Sum() - 1;
         for (var i = 0; i < count; ++i)
         {
-            var rand = RandomInt(0, tmpList.Sum() - 1);
-            for (var idx = 0; idx < tmpList.Count; ++idx)
+            var rand = RandomInt(0, rateMax);
+
+            for (var idx = 0; idx < rateList.Count; ++idx)
             {
-                rand -= tmpList[idx];
+                if (ret.Contains(idx)) continue;
+
+                rand -= rateList[idx];
                 if (rand < 0)
                 {
                     ret.Add(idx);
-                    tmpList.RemoveAt(idx);
+                    rateMax -= rateList[idx];
                     break;
                 }
             }
