@@ -222,7 +222,7 @@ public class MainCamera3D : MonoBehaviour
     {
         // 左右の計算
         var noYVec = new Vector3(vec.x, 0f, vec.z).normalized;
-        var lr = Mathf.Atan2(noYVec.z, noYVec.x);
+        var lr = Mathf.Atan2(noYVec.x, noYVec.z); // x / zの形、x=0の時が回転0度なので
         // 左右は移動距離が短い方を選択
         if (lr - rotLR.Get() > Mathf.PI)
             lr -= Mathf.PI * 2f;
@@ -230,8 +230,7 @@ public class MainCamera3D : MonoBehaviour
             lr += Mathf.PI * 2f;
 
         // 上下の計算
-        var noVec = vec.normalized;
-        var ud = Mathf.Atan2(Mathf.Sqrt(noVec.x * noVec.x + noVec.z * noVec.z), noVec.y);
+        var ud = Mathf.Atan2(-vec.y, Mathf.Sqrt(vec.x * vec.x + vec.z * vec.z)); // 縦/横の形、yは下向きが＋なので-y
         ud = Util.GetClampF(ud, rot_down_limit, rot_up_limit);
 
         if (time <= 0f)
