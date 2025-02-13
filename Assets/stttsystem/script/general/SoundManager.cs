@@ -36,6 +36,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip commonSeWindowOpen = null;
     /// <summary>汎用エラー音ブブッ</summary>
     public AudioClip commonSeError = null;
+    /// <summary>汎用キャンセル音</summary>
+    public AudioClip commonSeCancel = null;
 
     /// <summary>汎用BGM</summary>
     public AudioClip commonBgm = null;
