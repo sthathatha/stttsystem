@@ -37,7 +37,7 @@ public class MainCamera2D : MonoBehaviour
     /// <summary>
     /// フレーム処理
     /// </summary>
-    void Update()
+    void LateUpdate()
     {
         // 目標位置が離れている場合
         var distance = targetPos - basePos;
