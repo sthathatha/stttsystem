@@ -465,8 +465,8 @@ public class ManagerSceneScript : MonoBehaviour
         SubSceneLockAct(() =>
         {
             subScriptList.Remove(subscr);
+            SceneManager.UnloadSceneAsync(subscr.gameObject.scene);
         });
-        SceneManager.UnloadSceneAsync(subscr.gameObject.scene);
     }
 
     /// <summary>
