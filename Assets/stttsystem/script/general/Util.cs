@@ -8,6 +8,20 @@ using UnityEngine;
 public partial class Util
 {
     /// <summary>
+    /// デバッグログ
+    /// </summary>
+    /// <param name="msg"></param>
+    public static void DebugLog(string msg)
+    {
+        if (!Debug.isDebugBuild) return;
+
+        var tim = Time.realtimeSinceStartup;
+        var head = $"#{tim:F3}# ";
+
+        Debug.Log(head + msg);
+    }
+
+    /// <summary>
     /// サインカーブのfloatに変換
     /// </summary>
     /// <param name="_val">0～1</param>
